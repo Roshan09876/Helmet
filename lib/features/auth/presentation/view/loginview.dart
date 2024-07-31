@@ -1,11 +1,10 @@
-
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:helmet/app/app_routes.dart';
 import 'package:helmet/constants/custom_button.dart';
 import 'package:helmet/constants/show_snackbar.dart';
 import 'package:helmet/features/auth/service/service.dart';
-
 
 class Loginview extends ConsumerStatefulWidget {
   const Loginview({super.key});
@@ -30,8 +29,16 @@ void _login(BuildContext context) async {
       final result = await _Service.login(
           _emailController.text.trim(), _passwordController.text.trim());
       print('Login Successfully ${result}');
-      showSnackBar(message: 'Login Successfully', context: context);
-      Navigator.pushReplacementNamed(context, AppRoute.homeRoute);
+
+      EasyLoading.show(
+          status: 'Please Wait...', maskType: EasyLoadingMaskType.black);
+      Future.delayed(const Duration(seconds: 1), () {
+        Navigator.pushReplacementNamed(context, AppRoute.homeRoute);
+        EasyLoading.showSuccess(
+          'Loggedin in',
+        );
+        EasyLoading.dismiss();
+      });
     } catch (e) {
       if (e is Exception) {
         showSnackBar(

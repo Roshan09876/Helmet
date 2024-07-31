@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:helmet/app/app_routes.dart';
 import 'package:helmet/constants/custom_button.dart';
 import 'package:helmet/constants/show_snackbar.dart';
 import 'package:helmet/features/auth/service/service.dart';
-
 
 class Registerview extends ConsumerStatefulWidget {
   const Registerview({super.key});
@@ -38,12 +38,19 @@ void _register(BuildContext context) async {
           _emailController.text.trim(),
           _passwordController.text.trim());
       print('Registration successful: $response');
-      showSnackBar(message: response['message'], context: context);
-      Navigator.pushNamed(context, AppRoute.loginRoute);
+      EasyLoading.show(
+          status: 'Please Wait...', maskType: EasyLoadingMaskType.black);
+      Future.delayed(const Duration(seconds: 1), () {
+        Navigator.pushReplacementNamed(context, AppRoute.loginRoute);
+        EasyLoading.showSuccess(
+          'Registerd  Successfuly',
+        );
+        EasyLoading.dismiss();
+      });
     } catch (e) {
       if (e is Exception) {
         showSnackBar(
-          color: Colors.red,
+            color: Colors.red,
             message: e.toString().replaceFirst('Exception: ', ''),
             context: context);
       } else {
