@@ -1,0 +1,5 @@
+gradient: LinearGradient(
+                colors: [Colors.orange, Colors.deepOrange],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+              ),
